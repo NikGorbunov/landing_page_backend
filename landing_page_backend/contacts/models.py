@@ -2,13 +2,14 @@ from django.db import models
 
 
 class Project(models.Model):
-    PREVIOUS = 'Previous'
-    ONGOING = 'Ongoing'
-    PROJECT_TYPE = [(PREVIOUS, 'Previous'), (ONGOING, 'Ongoing')]
+    class ProjectType(models.TextChoices):
+        PREVIOUS = 'previous'
+        ONGOING = 'ongoing'
+
     project_name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="photos/%Y/%m/%d/")
     size = models.IntegerField()
-    project_type = models.CharField(max_length=32, choices=PROJECT_TYPE)
+    project_type = models.CharField(max_length=32, choices=ProjectType.choices)
     date_of_completion = models.DateTimeField(blank=True, null=True)
 
 
