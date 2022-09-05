@@ -1,22 +1,22 @@
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
+from datetime import date
+from contacts.utils import write_data_to_csv_file
+from landing_page_backend.settings import EMAIL_HOST_USER, EMAIL_RECIPIENT
 
-from contacts.models import Contact
-from contacts.utils import write_data_to_sfv_file
-from landing_page_backend.settings import EMAIL_HOST_USER
+date = date.today()
+file_name = f'contacts-{date}.csv'
 
 
 class Command(BaseCommand):
-    help = 'Weekly reports'
+    help = 'Exports previous week contact to a file and sends an email with a report file attached to an administrator.'
 
     def handle(self, *args, **options):
-        contacts = Contact.objects.all().values_list('name', 'email', 'number', 'message')
-        for contact in contacts:
-            write_data_to_sfv_file(contact)
+        write_data_to_csv_file()
 
         message = 'Weekly reports'
         subject = 'This is weekly reports'
-        email = EmailMessage(subject, message, EMAIL_HOST_USER, ['gorbunovmy.a@gmail.com'])
-        file = open('contacts-2022-09-01.csv', 'r')
-        email.attach('contacts-2022-09-01.csv', file.read())
+        email = EmailMessage(subject, message, EMAIL_HOST_USER, [EMAIL_RECIPIENT])
+        file = open(f'contacts/reports/{file_name}', 'r')
+        email.attach(f'contacts/reports/{file_name}', file.read())
         email.send()

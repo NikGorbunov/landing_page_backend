@@ -10,19 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
+
+env = environ.Env()
+
+# read th .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-85cp%k-cm#!n6*3qjtib!sjt3k0aku0+)xlh+7#=f5-wgg=21z'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -125,7 +133,8 @@ MEDIA_URL = '/media/'
 
 EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'testsmtpmail1@ukr.net'
-EMAIL_HOST_PASSWORD = 'WNCr2QnsV3dn8CTL'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
+EMAIL_RECIPIENT = env('EMAIL_RECIPIENT')
 

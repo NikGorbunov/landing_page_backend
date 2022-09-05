@@ -18,3 +18,4 @@ class Contact(models.Model):
     email = models.EmailField()
     number = models.IntegerField()
     message = models.TextField()
+    time_create = models.DateTimeField(auto_now_add=True)
