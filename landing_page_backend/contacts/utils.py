@@ -10,7 +10,9 @@ one_week_ago = date - timedelta(days=7)
 
 
 def export_contacts_to_csv_file():
-    contacts = Contact.objects.filter(create__gte=one_week_ago).values_list('name', 'email', 'number', 'message')
+    contacts = Contact.objects.filter(created__gte=one_week_ago)
+
+    contacts_data = contacts.values_list('name', 'email', 'number', 'message')
 
     file = open(f'contacts/reports/{file_name}', 'w', newline='')
 
@@ -19,5 +21,5 @@ def export_contacts_to_csv_file():
 
         write = csv.writer(file)
         write.writerow(header)
-        for fields in contacts:
-            write.writerow(fields)
+        for contact in contacts_data:
+            write.writerow(contact)
